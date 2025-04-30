@@ -4,13 +4,15 @@ import { TodoItem } from "./components/TodoItem";
 
 function App() {
   const [todoList, setTodoList] = useState([
-    { id: "A1", name: "Learn React" },
-    { id: "A2", name: "Learn CSS" },
-    { id: "A3", name: "Learn JavaScript" },
-  ])
+    { id: "A1", name: "Sleep", isImportant: true, isCompleted: true },
+    { id: "A2", name: "Read books", isImportant: false, isCompleted: false },
+    { id: "A3", name: "Apply jobs", isImportant: true, isCompleted: false },
+    { id: "A4", name: "Go to the gym", isImportant: false, isCompleted: false },
+    { id: "A5", name: "Learn React", isImportant: true, isCompleted: false },
+  ]);
 
   const todoItems = todoList.map((todo) => (
-    <TodoItem key={todo.id} name={todo.name} />
+    <TodoItem key={todo.id} name={todo.name} isImportant={todo.isImportant} isCompleted={todo.isCompleted} />
   ));
 
   const todoInputRef = useRef();
@@ -41,9 +43,7 @@ function App() {
         }}
       />
 
-      <div className="todo-list">
-        {todoItems}
-      </div>
+      <div className="todo-list">{todoItems}</div>
     </div>
   );
 }
