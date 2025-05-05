@@ -1,17 +1,17 @@
 export const TodoItem = (props) => {
-  const handleClick = () => {
-    console.log("Todo item clicked:", props.name);
-  };
-
   return (
-    <div className="todo-item" onClick={handleClick}>
-      <input
-        type="checkbox"
-        className="todo-item-checkbox"
-        checked={props.isCompleted}
-      />
-      <span className="todo-item-text">{props.name}</span>
-      {props.isImportant && <span> ⭐️</span>}
+    <div className="todo-item">
+      <div style={{ display: "flex", gap: "10px" }}>
+        <input
+          type="checkbox"
+          checked={props.isCompleted}
+          onChange={() => {
+            props.completeCheckboxItem(props.id);
+          }}
+        />
+        <span className="todo-item-text">{props.name}</span>
+      </div>
+      {props.isImportant && <p> ⭐️</p>}
     </div>
   );
 };

@@ -11,8 +11,26 @@ function App() {
     { id: "A5", name: "Learn React", isImportant: true, isCompleted: false },
   ]);
 
+  const completeCheckboxItem = (id) => {
+    console.log("Item completed:", id);
+    const updatedTodoList = todoList.map((todo) => {
+      if (todo.id === id) {
+        return { ...todo, isCompleted: !todo.isCompleted };
+      }
+      return todo;
+    });
+    setTodoList(updatedTodoList);
+  };
+
   const todoItems = todoList.map((todo) => (
-    <TodoItem key={todo.id} name={todo.name} isImportant={todo.isImportant} isCompleted={todo.isCompleted} />
+    <TodoItem
+      key={todo.id}
+      id={todo.id}
+      name={todo.name}
+      isImportant={todo.isImportant}
+      isCompleted={todo.isCompleted}
+      completeCheckboxItem={completeCheckboxItem}
+    />
   ));
 
   const todoInputRef = useRef();
@@ -35,6 +53,8 @@ function App() {
               const newTodo = {
                 id: crypto.randomUUID(),
                 name: newTask,
+                isImportant: false,
+                isCompleted: false,
               };
               setTodoList([...todoList, newTodo]);
               todoInputRef.current.value = "";
