@@ -1,6 +1,7 @@
 import { useState, useRef } from "react";
 import "./App.css";
-import { TodoItem } from "./components/TodoItem";
+import TodoItem from "./components/TodoItem";
+import Sidebar from "./components/Sidebar";
 
 function App() {
   const [todoList, setTodoList] = useState([
@@ -10,9 +11,9 @@ function App() {
     { id: "A4", name: "Go to the gym", isImportant: false, isCompleted: false },
     { id: "A5", name: "Learn React", isImportant: true, isCompleted: false },
   ]);
+  const [showSidebar, setShowSidebar] = useState(false);
 
   const completeCheckboxItem = (id) => {
-    console.log("Item completed:", id);
     const updatedTodoList = todoList.map((todo) => {
       if (todo.id === id) {
         return { ...todo, isCompleted: !todo.isCompleted };
@@ -22,6 +23,14 @@ function App() {
     setTodoList(updatedTodoList);
   };
 
+  const viewTodoItem = (id) => {
+    if (showSidebar) {
+      setShowSidebar(false);
+    } else {
+      setShowSidebar(true);
+    }
+  }
+
   const todoItems = todoList.map((todo) => (
     <TodoItem
       key={todo.id}
@@ -30,6 +39,7 @@ function App() {
       isImportant={todo.isImportant}
       isCompleted={todo.isCompleted}
       completeCheckboxItem={completeCheckboxItem}
+      viewTodoItem={viewTodoItem}
     />
   ));
 
@@ -49,7 +59,6 @@ function App() {
           if (e.key === "Enter") {
             const newTask = e.target.value;
             if (newTask) {
-              console.log("New task added:", newTask);
               const newTodo = {
                 id: crypto.randomUUID(),
                 name: newTask,
@@ -64,6 +73,7 @@ function App() {
       />
 
       <div className="todo-list">{todoItems}</div>
+      {showSidebar && <Sidebar />}
     </div>
   );
 }

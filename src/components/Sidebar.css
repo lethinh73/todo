@@ -1,0 +1,40 @@
+
+.sidebar {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 20vw;
+    height: 100vh;
+    background-color: white;
+    box-shadow: -2px 0 3px gray;
+    display: flex;
+    flex-direction: column;
+}
+
+.sb-form {
+    padding: 20px 10px;
+}
+
+.sb-form-field {
+    margin-bottom: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.sb-footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    padding: 10px;
+    text-align: center;
+    border-top: 1px solid black
+}
+
+.sb-footer button {
+    border-radius: 5px;
+    padding: 10px 20px;
+    text-align: center;
+    margin: 4px 2px;
+    cursor: pointer;
+}

@@ -1,6 +1,6 @@
-export const TodoItem = (props) => {
+function TodoItem(props) {
   return (
-    <div className="todo-item">
+    <div className="todo-item" onClick={() => props.viewTodoItem(props.id)}>
       <div style={{ display: "flex", gap: "10px" }}>
         <input
           type="checkbox"
@@ -14,4 +14,6 @@ export const TodoItem = (props) => {
       {props.isImportant && <p> ⭐️</p>}
     </div>
   );
-};
+}
+
+export default TodoItem;
