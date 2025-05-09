@@ -12,6 +12,7 @@ function App() {
     { id: "A5", name: "Learn React", isImportant: true, isCompleted: false },
   ]);
   const [showSidebar, setShowSidebar] = useState(false);
+  const [activeTodoID, setActiveTodoID] = useState(null);
 
   const completeCheckboxItem = (id) => {
     const updatedTodoList = todoList.map((todo) => {
@@ -22,14 +23,26 @@ function App() {
     });
     setTodoList(updatedTodoList);
   };
-
   const viewTodoItem = (id) => {
-    if (showSidebar) {
-      setShowSidebar(false);
-    } else {
-      setShowSidebar(true);
-    }
-  }
+    setShowSidebar(true);
+    setActiveTodoID(id);
+    console.log("Clicked todo item with ID:", id);
+  };
+  const updateTodoItem = (id, updatedTodo) => {
+    const updatedTodoList = todoList.map((todo) => {
+      if (todo.id === id) {
+        return { ...todo, ...updatedTodo };
+      }
+      return todo;
+    });
+    setTodoList(updatedTodoList);
+  };
+  const closeSidebar = () => {
+    setShowSidebar(false);
+    setActiveTodoID(null);
+  };
+
+  const activeTodoItem = todoList.find((todo) => todo.id === activeTodoID);
 
   const todoItems = todoList.map((todo) => (
     <TodoItem
@@ -73,7 +86,14 @@ function App() {
       />
 
       <div className="todo-list">{todoItems}</div>
-      {showSidebar && <Sidebar />}
+      {showSidebar && (
+        <Sidebar
+          key={activeTodoItem.id}
+          activeTodoItem={activeTodoItem}
+          updateTodoItem={updateTodoItem}
+          closeSidebar={closeSidebar}
+        />
+      )}
     </div>
   );
 }
