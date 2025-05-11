@@ -1,18 +1,19 @@
 import "./Sidebar.css";
+import { useState } from "react";
 
 function Sidebar(props) {
+  const [name, setName] = useState(props.activeTodoItem.name);
+  const [isCompleted, setIsCompleted] = useState(props.activeTodoItem.isCompleted);
+  const [isImportant, setIsImportant] = useState(props.activeTodoItem.isImportant);
+
   const handleSave = (e) => {
     const updatedTodo = {
-        name: document.getElementById("sb-name").value,
-        isCompleted: document.getElementById("sb-completed").checked,
-        isImportant: document.getElementById("sb-important").checked,
+        name: name,
+        isCompleted: isCompleted,
+        isImportant: isImportant,
     };
 
     props.updateTodoItem(props.activeTodoItem.id, updatedTodo);
-  };
-
-  const handleCancel = (e) => {
-    props.closeSidebar();
   };
 
   return (
@@ -25,7 +26,8 @@ function Sidebar(props) {
             id="sb-name"
             name="sb-name"
             placeholder="Task Name"
-            defaultValue={props.activeTodoItem.name}
+            value={name}
+            onChange={(e) => setName(e.target.value.trim())}
           />
         </div>
         <div className="sb-form-field">
@@ -34,7 +36,8 @@ function Sidebar(props) {
             type="checkbox"
             id="sb-completed"
             name="sb-completed"
-            defaultChecked={props.activeTodoItem.isCompleted}
+            checked={isCompleted}
+            onChange={(e) => setIsCompleted(e.target.checked)}
           />
         </div>
         <div className="sb-form-field">
@@ -43,7 +46,8 @@ function Sidebar(props) {
             type="checkbox"
             id="sb-important"
             name="sb-important"
-            defaultChecked={props.activeTodoItem.isImportant}
+            checked={isImportant}
+            onChange={(e) => setIsImportant(e.target.checked)}
           />
         </div>
       </form>
@@ -51,7 +55,7 @@ function Sidebar(props) {
         <button className="sb-save-btn" onClick={handleSave}>
           Save
         </button>
-        <button className="sb-cancel-btn" onClick={handleCancel}>
+        <button className="sb-cancel-btn" onClick={props.handleCloseSidebar}>
             Cancel
         </button>
       </div>

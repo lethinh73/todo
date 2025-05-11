@@ -13,50 +13,51 @@ function App() {
   ]);
   const [showSidebar, setShowSidebar] = useState(false);
   const [activeTodoID, setActiveTodoID] = useState(null);
+  
+  const todoInputRef = useRef();
 
-  const completeCheckboxItem = (id) => {
-    const updatedTodoList = todoList.map((todo) => {
-      if (todo.id === id) {
-        return { ...todo, isCompleted: !todo.isCompleted };
-      }
-      return todo;
-    });
-    setTodoList(updatedTodoList);
+  const handleToggleComplete = (id) => {
+    setTodoList((prev) =>
+      prev.map((todo) =>
+        todo.id === id ? { ...todo, isCompleted: !todo.isCompleted } : todo
+      )
+    );
   };
-  const viewTodoItem = (id) => {
+
+  const handleViewTodo = (id) => {
     setShowSidebar(true);
     setActiveTodoID(id);
     console.log("Clicked todo item with ID:", id);
   };
-  const updateTodoItem = (id, updatedTodo) => {
-    const updatedTodoList = todoList.map((todo) => {
-      if (todo.id === id) {
-        return { ...todo, ...updatedTodo };
-      }
-      return todo;
-    });
-    setTodoList(updatedTodoList);
+
+  const handleUpdateTodo = (id, updatedTodo) => {
+    setTodoList((prev) =>
+      prev.map((todo) => (todo.id === id ? { ...todo, ...updatedTodo } : todo))
+    );
   };
-  const closeSidebar = () => {
+
+  const handleCloseSidebar = () => {
     setShowSidebar(false);
     setActiveTodoID(null);
   };
 
+  const handleAddTodo = (e) => {
+    if (e.key === "Enter") {
+      const newTask = e.target.value.trim();
+      if (newTask) {
+        const newTodo = {
+          id: crypto.randomUUID(),
+          name: newTask,
+          isImportant: false,
+          isCompleted: false,
+        };
+        setTodoList((prev) => [...prev, newTodo]);
+        todoInputRef.current.value = "";
+      }
+    }
+  };
+
   const activeTodoItem = todoList.find((todo) => todo.id === activeTodoID);
-
-  const todoItems = todoList.map((todo) => (
-    <TodoItem
-      key={todo.id}
-      id={todo.id}
-      name={todo.name}
-      isImportant={todo.isImportant}
-      isCompleted={todo.isCompleted}
-      completeCheckboxItem={completeCheckboxItem}
-      viewTodoItem={viewTodoItem}
-    />
-  ));
-
-  const todoInputRef = useRef();
 
   return (
     <div className="container">
@@ -68,30 +69,29 @@ function App() {
         name="add-new-task"
         className="task-input"
         placeholder="Add a new task"
-        onKeyDown={(e) => {
-          if (e.key === "Enter") {
-            const newTask = e.target.value;
-            if (newTask) {
-              const newTodo = {
-                id: crypto.randomUUID(),
-                name: newTask,
-                isImportant: false,
-                isCompleted: false,
-              };
-              setTodoList([...todoList, newTodo]);
-              todoInputRef.current.value = "";
-            }
-          }
-        }}
+        onKeyDown={handleAddTodo}
       />
 
-      <div className="todo-list">{todoItems}</div>
+      <div className="todo-list">
+        {todoList.map((todo) => (
+          <TodoItem
+            key={todo.id}
+            id={todo.id}
+            name={todo.name}
+            isImportant={todo.isImportant}
+            isCompleted={todo.isCompleted}
+            handleToggleComplete={handleToggleComplete}
+            handleViewTodo={handleViewTodo}
+          />
+        ))}
+      </div>
+
       {showSidebar && (
         <Sidebar
           key={activeTodoItem.id}
           activeTodoItem={activeTodoItem}
-          updateTodoItem={updateTodoItem}
-          closeSidebar={closeSidebar}
+          handleUpdateTodo={handleUpdateTodo}
+          handleCloseSidebar={handleCloseSidebar}
         />
       )}
     </div>
